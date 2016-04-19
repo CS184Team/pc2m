@@ -9,9 +9,23 @@
 void FileIO::readTxt(char *ifile, Cloud &vertices) {
 	std::string line;
 	std::ifstream ifs(ifile);
+	ifs.unsetf(std::ios_base::skipws);
+	int line_count = std::count(std::istream_iterator<char>(ifs), std::istream_iterator<char>(), '\n');
+	ifs.clear();
+	ifs.seekg(0, ifs.beg);
+	vertices.reserve(line_count);
+    #ifdef TEST_DEBUG
+    std::cout << "[FileIO] #lines in " << ifile << ": " << line_count << std::endl;
+    int line_mod = (int) (line_count / 20.0);
+    #endif
 	if (ifs.is_open()) {
 		int index = 0;
 		while (getline(ifs, line)) {
+			#ifdef TEST_DEBUG
+			if (index % line_mod == 0) {
+				std::cout << "[FileIO] " << (int) (index * 100.0 / line_count) << "%" << " " << index << std::endl;
+			}
+			#endif
 			std::istringstream iss(line);
 			double x, y, z, nx, ny, nz;
 			iss >> x;

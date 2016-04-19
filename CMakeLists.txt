@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(PointCloud2Mesh)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+add_definitions(-DTEST_DEBUG)
 
 file(GLOB LIB_SOURCES src/*.cpp src/*.c)
 file(GLOB LIB_HEADERS src/*.h)
@@ -13,13 +14,11 @@ foreach(target_file ${APP_SOURCES})
     string(REPLACE ".cpp" "" target_name ${target_file})
     string(REPLACE ".c" "" target_name ${target_name})
     add_executable(${target_name} src/${target_file})
-    target_link_libraries(${target_name}
-            MyLib
-            )
-    install(TARGETS ${target_name} DESTINATION ${PointCloud2Mesh_SOURCE_DIR})
     if (APPLE)
         set_property(TARGET ${target_name} APPEND_STRING PROPERTY COMPILE_FLAGS
                 "-Wno-deprecated-declarations -Wno-c++11-extensions")
     endif (APPLE)
+    target_link_libraries(${target_name} MyLib)
+    install(TARGETS ${target_name} DESTINATION ${PointCloud2Mesh_SOURCE_DIR})
 endforeach(target_file ${APP_SOURCES})
 set(EXECUTABLE_OUTPUT_PATH .)

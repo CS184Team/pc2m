@@ -17,3 +17,12 @@ std::pair<int, int> Edge::get_index() const {
 	}
 	return std::pair<int, int>(v1, v2);
 }
+
+std::ostream & operator<<(std::ostream &os, const Edge & e) {
+	os << e.va << "->" << e.vb;
+	return os;
+}
+
+std::ostream & operator<<(std::ostream &os, const Edge * e) {
+	return os << *e;
+}

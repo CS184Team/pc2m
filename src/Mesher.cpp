@@ -6,6 +6,9 @@ Mesher::~Mesher() {
 }
 
 Mesher::Mesher(Cloud cloud, double radius) : cloud(cloud) {
+	#ifdef TEST_DEBUG
+	std::cout << "[Mesher] Constructing a Mesher object" << std::endl;
+	#endif
 	this->radius = radius;
 	voxelArray = new VoxelArray(cloud, radius);
 }
@@ -15,14 +18,25 @@ void Mesher::constructMesh() {
     	if (!findSeedTriangle()) {
     		printf("Could not find a seed triangle. Exiting.\n");
     	} else {
+    		#ifdef TEST_DEBUG
+    		printf("Found a seed triangle. Now looking to expand triangulation.\n");
+    		for (auto e : edge_front) {
+    			std::cout << e << std::endl;
+    		}
+    		#endif
     		expandTriangulation();
     	}
     }
 }
 
 bool Mesher::findSeedTriangle() {
+	#ifdef TEST_DEBUG
+	std::cout << "[Mesher] Finding the seed triangle" << std::endl;
+	#endif
 	for (auto p : cloud) {
 		Cloud neighbors = voxelArray->get_neighboring_vertices(p->position);
+		#ifdef TEST_DEBUG
+		#endif
 		for (auto q : neighbors) {
 			for (auto s : neighbors) {
 				if (q == s) {

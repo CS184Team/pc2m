@@ -16,6 +16,8 @@ public:
 	bool is_inner;
 	bool is_boundary;
 	std::pair<int, int> get_index() const;
+	friend std::ostream & operator<<(std::ostream &os, const Edge &e);
+	friend std::ostream & operator<<(std::ostream &os, const Edge *e);
 };
 
 #endif

@@ -9,6 +9,9 @@ VoxelArray::~VoxelArray() {
 }
 
 VoxelArray::VoxelArray(const Cloud &cloud, double radius) : cloud(cloud) {
+	#ifdef TEST_DEBUG
+	std::cout << "[VoxelArray] Constructing a VoxelArray" << std::endl;
+	#endif
 	this->radius = radius;
 	this->diameter = radius * 2;
 	double max = std::numeric_limits<double>::max();
