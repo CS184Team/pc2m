@@ -29,7 +29,11 @@ double Vertex::nz() const {
 	return normal.z;
 }
 
-std::ostream& operator<<(std::ostream& os, const Vertex& v) {
-	os << v.position << " " << v.normal;
+std::ostream& operator<<(std::ostream& os, const Vertex &v) {
+	os << v.index;
 	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Vertex *v) {
+	return os << *v;
 }

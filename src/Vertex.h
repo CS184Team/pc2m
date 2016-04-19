@@ -17,7 +17,8 @@ public:
 	bool is_inner;
 	int index;
 	Vertex(const int index, const Vector &position, const Vector &normal);
-	friend std::ostream& operator<<(std::ostream& os, const Vertex& vertex);
+	friend std::ostream& operator<<(std::ostream &os, const Vertex &vertex);
+	friend std::ostream& operator<<(std::ostream &os, const Vertex *vertex);
 };
 
 #endif

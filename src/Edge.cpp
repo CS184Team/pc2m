@@ -3,6 +3,8 @@
 Edge::Edge(const Vertex &va, const Vertex &vb, Facet *fa, Facet *fb) : va(va), vb(vb) {
 	this->fa = fa;
 	this->fb = fb;
+	is_inner = false;
+	is_boundary = false;
 }
 
 Vector Edge::midpoint() const {

@@ -1,5 +1,6 @@
 #include "Mesher.h"
 #include <math.h>
+#include <cassert>
 
 Mesher::~Mesher() {
 	delete voxelArray;
@@ -21,7 +22,7 @@ void Mesher::constructMesh() {
     		#ifdef TEST_DEBUG
     		printf("[Mesher] Found a seed triangle. Now looking to expand triangulation.\n");
     		for (Edge * e : edge_front) {
-    			std::cout << "[Mesher] e_i in edge_front = " << e << std::endl;
+    			std::cout << "[Mesher] e in edge_front = " << e << std::endl;
     		}
     		#endif
     		expandTriangulation();
@@ -38,8 +39,11 @@ bool Mesher::findSeedTriangle() {
 		#ifdef TEST_DEBUG
 		#endif
 		for (auto q : neighbors) {
+			if (p == q) {
+				continue;
+			}
 			for (auto s : neighbors) {
-				if (q == s) {
+				if (p == s || q == s) {
 					continue;
 				}
 				Vector pq = q->position - p->position;
@@ -66,6 +70,9 @@ bool Mesher::findSeedTriangle() {
 					Edge *ea = new Edge(*p, *q, f, NULL);
 					Edge *eb = new Edge(*p, *s, f, NULL);
 					Edge *ec = new Edge(*q, *s, f, NULL);
+					f->ea = ea;
+					f->eb = eb;
+					f->ec = ec;
 					edges.insert({ea->get_index(), ea});
 					edges.insert({eb->get_index(), eb});
 					edges.insert({ec->get_index(), ec});
@@ -84,10 +91,17 @@ bool Mesher::findSeedTriangle() {
 }
 
 void Mesher::expandTriangulation() {
+	#ifdef TEST_DEBUG
+	std::cout << "[Mesher] Expanding the triangulation" << std::endl;
+	#endif
 	while (!edge_front.empty()) {
 		Edge *e = edge_front.back();
 		edge_front.pop_back();
+		#ifdef TEST_DEBUG
+		std::cout << "[Mesher] Expanding on edge " << e << std::endl;
+		#endif
 		if (e->is_boundary || e->is_inner) {
+			std::cout << "a;lkdsjfl; asjdl;kf ja;";
 			continue;
 		}
 		Vertex *v = findCandidate(e);
@@ -140,7 +154,13 @@ void Mesher::expandTriangulation() {
 }
 
 Vertex * Mesher::findCandidate(Edge * e) {
+	#ifdef TEST_DEBUG
+	std::cout << "[Mesher] Finding a candidate for e " << e << std::endl;
+	#endif
 	Facet *fa = e->fa;
+	#ifdef TEST_DEBUG
+	std::cout << "[Mesher] e->fa = " << fa << std::endl;
+	#endif
 	Vector c = fa->get_circumcenter();
 	Vector m = e->midpoint();
 	double r_prime = (m - c).norm() + radius;
