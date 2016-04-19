@@ -19,7 +19,7 @@ std::pair<int, int> Edge::get_index() const {
 }
 
 std::ostream & operator<<(std::ostream &os, const Edge & e) {
-	os << e.va << "->" << e.vb;
+	os << e.va.index << "->" << e.vb.index;
 	return os;
 }
 

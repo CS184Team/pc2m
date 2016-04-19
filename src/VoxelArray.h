@@ -22,7 +22,7 @@ private:
 	int z_len;
 
 	int get_flat_index(const Vector &vector) const;
-	void get_indices(const Vector &vector, int xi, int yi, int zi) const;
+	void get_indices(const Vector &vector, int &xi, int &yi, int &zi) const;
 	int get_flat_index(int xi, int yi, int zi) const;
 };
 

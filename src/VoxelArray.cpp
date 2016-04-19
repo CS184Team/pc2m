@@ -37,19 +37,57 @@ VoxelArray::VoxelArray(const Cloud &cloud, double radius) : cloud(cloud) {
 			high->z = vertex->z();
 		}
 	}
-	Vector diagonal = high - low;
+	Vector diagonal = *high - *low;
 
 	x_len = (int) ceil(diagonal.x / diameter);
 	y_len = (int) ceil(diagonal.y / diameter);
 	z_len = (int) ceil(diagonal.z / diameter);
 
-	for (auto vertex : cloud) {
-		voxels[get_flat_index(vertex->position)].push_back(vertex);
+	int num_voxels = x_len * y_len * z_len;
+
+	#ifdef TEST_DEBUG
+	std::cout << "[VoxelArray] x_len, y_len, z_len = " << x_len << ", " << y_len << ", " << z_len << std::endl;
+	#endif
+
+	for (int i = 0; i < x_len * y_len * z_len; ++i) {
+		voxels.push_back(Cloud());
 	}
+
+	#ifdef TEST_DEBUG
+	int i = 0;
+	int i_mod = (int) (cloud.size() / 20.0);
+	std::cout << "[VoxelArray] Assigning " << cloud.size() << " samples to " << voxels.size() << " cells" << std::endl;
+	#endif
+
+	for (auto vertex : cloud) {
+		#ifdef TEST_DEBUG
+		if (i % i_mod == 0) {
+			std::cout << "[VoxelArray] " << (int) (i * 100.0 / cloud.size()) << "%" << " " << i << std::endl;
+		}
+		++i;
+		#endif
+		int flat_index = get_flat_index(vertex->position);
+		#ifdef TEST_DEBUG
+		if (flat_index >= cloud.size()) {
+			std::cout << "[VoxelArray] " << flat_index << " out of bounds (" << cloud.size() << ")" << std::endl;
+		}
+		#endif
+		#ifdef TEST_DEBUG
+		// std::cout << "[VoxelArray] voxels[" << flat_index << "] = " << voxels[flat_index] << std::endl;
+		#endif
+		voxels[flat_index].push_back(vertex);
+	}
+
+	#ifdef TEST_DEBUG
+	std::cout << "[VoxelArray] Done constructing the VoxelArray object" << std::endl;
+	#endif
 }
 
-void VoxelArray::get_indices(const Vector &vector, int xi, int yi, int zi) const {
+void VoxelArray::get_indices(const Vector &vector, int &xi, int &yi, int &zi) const {
 	Vector indexVector = (vector - *low) / diameter;
+	#ifdef TEST_DEBUG
+	// std::cout << "[VoxelArray] indexVector = " << indexVector << std::endl;
+	#endif
 	xi = (int) indexVector.x;
 	yi = (int) indexVector.y;
 	zi = (int) indexVector.z;
@@ -58,6 +96,9 @@ void VoxelArray::get_indices(const Vector &vector, int xi, int yi, int zi) const
 int VoxelArray::get_flat_index(const Vector &vector) const {
 	int xi, yi, zi;
 	get_indices(vector, xi, yi, zi);
+	#ifdef TEST_DEBUG
+	// std::cout << "[VoxelArray] xi, yi, zi = " << xi << ", " << yi << ", " << zi << std::endl;
+	#endif
 	return get_flat_index(xi, yi, zi);
 }
 

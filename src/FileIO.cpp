@@ -4,7 +4,8 @@
 #include <sstream>
 #include <string>
 #include "Vector.h"
-
+#include <cassert>
+#include <cmath>
 
 void FileIO::readTxt(char *ifile, Cloud &vertices) {
 	std::string line;
@@ -37,7 +38,10 @@ void FileIO::readTxt(char *ifile, Cloud &vertices) {
 			Vector *position = new Vector(x, y, z);
 			Vector *normal = new Vector(nx, ny, nz);
 			#ifdef TEST_DEBUG
-			assert abs(normal.norm() - 1.0) < 0.001;
+			bool invalid_norm = fabs(normal->norm() - 1.0) > 0.1;
+			if (invalid_norm) {
+				std::cout << "[FileIO] Invalid norm @line " << index << ": " << normal << std::endl;
+			}
 			#endif
 			Vertex *vertex = new Vertex(index, *position, *normal);
 			vertices.push_back(vertex);
@@ -45,6 +49,9 @@ void FileIO::readTxt(char *ifile, Cloud &vertices) {
 		}
 		ifs.close();
   	}
+  	#ifdef TEST_DEBUG
+  	std::cout << "[FileIO] Done reading " << ifile << std::endl;
+  	#endif
 }
 
 void FileIO::writePly(char *ofile, const Cloud &vertices, const std::vector<Facet *> &facets) {

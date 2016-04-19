@@ -21,7 +21,8 @@ public:
 	friend double angle_between(const Vector &a, const Vector &b);
 	double norm2() const;
 	double norm() const;
-	friend std::ostream& operator<<(std::ostream& os, const Vector& v);
+	friend std::ostream& operator<<(std::ostream& os, const Vector &v);
+	friend std::ostream& operator<<(std::ostream& os, const Vector *v);
 };
 
 #endif

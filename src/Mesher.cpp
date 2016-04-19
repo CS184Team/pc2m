@@ -16,12 +16,12 @@ Mesher::Mesher(Cloud cloud, double radius) : cloud(cloud) {
 void Mesher::constructMesh() {
     if (edge_front.empty()) {
     	if (!findSeedTriangle()) {
-    		printf("Could not find a seed triangle. Exiting.\n");
+    		printf("[Mesher] Could not find a seed triangle. Exiting.\n");
     	} else {
     		#ifdef TEST_DEBUG
-    		printf("Found a seed triangle. Now looking to expand triangulation.\n");
-    		for (auto e : edge_front) {
-    			std::cout << e << std::endl;
+    		printf("[Mesher] Found a seed triangle. Now looking to expand triangulation.\n");
+    		for (Edge * e : edge_front) {
+    			std::cout << "[Mesher] e_i in edge_front = " << e << std::endl;
     		}
     		#endif
     		expandTriangulation();

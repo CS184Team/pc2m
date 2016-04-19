@@ -53,7 +53,12 @@ double angle_between(const Vector &a, const Vector &b) {
 	return acos(cos_theta);
 }
 
-std::ostream& operator<<(std::ostream& os, const Vector& v) {
+std::ostream& operator<<(std::ostream &os, const Vector &v) {
 	os << v.x << " " << v.y << " " << v.z;
+	return os;
+}
+
+std::ostream& operator<<(std::ostream &os, const Vector *v) {
+	os << *v;
 	return os;
 }
