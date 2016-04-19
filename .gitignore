@@ -1,0 +1,10 @@
+build/
+.idea
+ply/
+xyz/
+txt/
+*.ply
+*.xyz
+*.xyz_ijk
+*.xyz_n
+*.tar.gz
