@@ -36,6 +36,9 @@ void FileIO::readTxt(char *ifile, Cloud &vertices) {
 			iss >> nz;
 			Vector *position = new Vector(x, y, z);
 			Vector *normal = new Vector(nx, ny, nz);
+			#ifdef TEST_DEBUG
+			assert abs(normal.norm() - 1.0) < 0.001;
+			#endif
 			Vertex *vertex = new Vertex(index, *position, *normal);
 			vertices.push_back(vertex);
 			++index;
