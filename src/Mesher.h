@@ -28,8 +28,11 @@ public:
 	Vertex * findCandidate(Edge *edge);
 	std::vector<Edge *> edge_front;
 	VoxelArray *voxelArray;
+	// Keep track of edges that have been used in the mesh
 	std::unordered_map<std::pair<int, int>, Edge *, pair_hash > edges;
+	// Store list of facets for saving mesh to file at end
 	std::vector<Facet *> facets;
+	int seed_triangle_index;
 };
 
 #endif

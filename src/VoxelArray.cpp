@@ -68,7 +68,7 @@ VoxelArray::VoxelArray(const Cloud &cloud, double radius) : cloud(cloud) {
 		#endif
 		int flat_index = get_flat_index(vertex->position);
 		#ifdef TEST_DEBUG
-		if (flat_index >= cloud.size()) {
+		if (flat_index >= voxels.size()) {
 			std::cout << "[VoxelArray] " << flat_index << " out of bounds (" << cloud.size() << ")" << std::endl;
 		}
 		#endif

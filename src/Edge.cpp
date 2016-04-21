@@ -26,5 +26,9 @@ std::ostream & operator<<(std::ostream &os, const Edge & e) {
 }
 
 std::ostream & operator<<(std::ostream &os, const Edge * e) {
+	if (e == NULL) {
+		os << "NULL";
+		return os;
+	}
 	return os << *e;
 }

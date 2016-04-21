@@ -45,11 +45,15 @@ double dot(const Vector &a, const Vector &b) {
 	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
+static double clamp(double x, double low, double high) {
+	return std::min(high, std::max(low, x));
+}
+
 double angle_between(const Vector &a, const Vector &b) {
 	double d = dot(a, b);
 	double na = a.norm();
 	double nb = b.norm();
-	double cos_theta = d / (na * nb);
+	double cos_theta = clamp(d / (na * nb), -1.0, 1.0);
 	return acos(cos_theta);
 }
 
@@ -59,6 +63,21 @@ std::ostream& operator<<(std::ostream &os, const Vector &v) {
 }
 
 std::ostream& operator<<(std::ostream &os, const Vector *v) {
-	os << *v;
-	return os;
+	if (v == NULL) {
+		os << "NULL";
+		return os;
+	}
+	return os << *v;
 }
+
+Vector Vector::unit() const {
+	return *this / this->norm();
+}
+
+Vector Vector::operator-() const {
+	return -1 * *this;
+}
+
+//int main(int argc, char **argv) {
+//
+//}

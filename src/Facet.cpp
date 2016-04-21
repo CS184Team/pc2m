@@ -18,10 +18,14 @@ Facet::Facet(Edge *e, const Vertex &v) : va(e->va), vb(e->vb), vc(v) {
 	ea = e;
 	eb = new Edge(va, vc, e->fa, NULL);
 	ec = new Edge(vb, vc, e->fa, NULL);
+
 	initialize();
 }
 
 void Facet::initialize() {
+	// Vector x = cross(vb.position - va.position, vc.position - va.position);
+	// if (dot )
+
 	double a = (vb.position - vc.position).norm();
 	double b = (va.position - vc.position).norm();
 	double c = (va.position - vb.position).norm();
@@ -37,9 +41,18 @@ void Facet::initialize() {
 	circumcenter = bary.x * va.position + bary.y * vb.position + bary.z * vc.position;
 	circumradius2 = a2 * b2 * c2 / ((a + b + c) * (b + c - a) * (c + a - b) * (a + b - c));
 	circumradius = sqrt(circumradius2);
+	normal = cross(vb.position - va.position, vc.position - va.position).unit();
+	Vector vertices_normal = (va.normal + vb.normal + vc.normal).unit();
+	if (dot(normal, vertices_normal) < 0.0) {
+		normal = -normal;
+	}
 }
 
-Vector Facet::get_circumcenter() const {
+const Vector & Facet::get_normal() const {
+	return normal;
+}
+
+const Vector & Facet::get_circumcenter() const {
 	return circumcenter;
 }
 
@@ -57,6 +70,10 @@ std::ostream & operator<<(std::ostream &os, const Facet &f) {
 }
 
 std::ostream & operator<<(std::ostream &os, const Facet *f) {
+	if (f == NULL) {
+		os << "NULL";
+		return os;
+	}
 	return os << *f;
 }
 

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(PointCloud2Mesh)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-add_definitions(-DTEST_DEBUG)
+#add_definitions(-DTEST_DEBUG)
 
 file(GLOB LIB_SOURCES src/*.cpp src/*.c)
 file(GLOB LIB_HEADERS src/*.h)

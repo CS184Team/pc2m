@@ -4,6 +4,7 @@
 int main(int argc, char **argv) {
 	if (argc < 4) {
 		printf("Usage:\n\t%s <input.txt> <output.txt> <radius>\n", argv[0]);
+		printf("Use radius = 0.0005 for the Stanford Dragon\n");
 		return 1;
 	}
 	#ifdef TEST_DEBUG

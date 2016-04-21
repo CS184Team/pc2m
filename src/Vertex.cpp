@@ -35,5 +35,9 @@ std::ostream& operator<<(std::ostream& os, const Vertex &v) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Vertex *v) {
+	if (v == NULL) {
+		os << "NULL";
+		return os;
+	}
 	return os << *v;
 }

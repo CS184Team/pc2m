@@ -14,6 +14,8 @@ public:
 	Vector operator-(const Vector &other) const;
 	Vector operator+(const Vector &other) const;
 	Vector operator/(double k) const;
+	Vector operator-() const;
+	Vector unit() const;
 	friend Vector operator*(double k, const Vector &vec);
 	friend Vector operator*(const Vector &vec, double k);
 	friend Vector cross(const Vector &a, const Vector &b);

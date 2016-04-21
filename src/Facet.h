@@ -7,9 +7,10 @@ class Edge;
 
 class Facet {
 public:
-	Vector get_circumcenter() const;
+	const Vector & get_circumcenter() const;
 	double get_circumradius() const;
 	double get_circumradius2() const;
+	const Vector & get_normal() const;
 	const Vertex &va;
 	const Vertex &vb;
 	const Vertex &vc;
@@ -24,6 +25,7 @@ private:
 	Vector circumcenter;
 	double circumradius;
 	double circumradius2;
+	Vector normal;
 	void initialize();
 };
 
