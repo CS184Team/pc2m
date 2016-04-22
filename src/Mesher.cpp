@@ -16,22 +16,21 @@ Mesher::Mesher(Cloud cloud, double radius) : cloud(cloud) {
 
 void Mesher::constructMesh() {
     // if (edge_front.empty()) {
-    	seed_triangle_index = 0;
-    	while (true) {
-			if (!findSeedTriangle()) {
-				printf("[Mesher] Could not find a seed triangle. Exiting.\n");
-				return;
-			} else {
-				#ifdef TEST_DEBUG
-				printf("[Mesher] Found a seed triangle. Now looking to expand triangulation.\n");
-				for (Edge * e : edge_front) {
-					std::cout << "[Mesher] e in edge_front = " << e << std::endl;
-				}
-				#endif
-				expandTriangulation();
+	seed_triangle_index = 0;
+	while (true) {
+		if (!findSeedTriangle()) {
+			printf("[Mesher] Could not find a seed triangle. Exiting.\n");
+			return;
+		} else {
+			#ifdef TEST_DEBUG
+			printf("[Mesher] Found a seed triangle. Now looking to expand triangulation.\n");
+			for (Edge * e : edge_front) {
+				std::cout << "[Mesher] e in edge_front = " << e << std::endl;
 			}
+			#endif
+			expandTriangulation();
 		}
-    // }
+	}
 }
 
 bool Mesher::findSeedTriangle() {
@@ -61,6 +60,7 @@ bool Mesher::findSeedTriangle() {
 				Facet *f = new Facet(*p, *q, *s, NULL, NULL, NULL);
 				Vector c = f->get_circumcenter();
 				double r2 = f->get_circumradius2();
+				c = c + sqrt(radius * radius - r2) * n;
 				bool empty_ball_config = true;
 				for (auto v : neighbors) {
 					if ((v->position - c).norm2() < r2) {
@@ -68,10 +68,11 @@ bool Mesher::findSeedTriangle() {
 						break;
 					}
 				}
+				// empty_ball_config = true;
 				if (empty_ball_config) {
 					Edge *ea = new Edge(*p, *q, f, NULL);
-					Edge *eb = new Edge(*p, *s, f, NULL);
-					Edge *ec = new Edge(*q, *s, f, NULL);
+					Edge *eb = new Edge(*q, *s, f, NULL);
+					Edge *ec = new Edge(*s, *p, f, NULL);
 					f->ea = ea;
 					f->eb = eb;
 					f->ec = ec;
@@ -83,6 +84,7 @@ bool Mesher::findSeedTriangle() {
 					edge_front.push_back(ec);
 					facets.push_back(f);
 					++seed_triangle_index;
+					// return f;
 					return true;
 				} else {
 					delete f;
@@ -128,8 +130,10 @@ void Mesher::expandTriangulation() {
 		auto iter = edges.find(edge_index);
 		bool has_two_adjacent_faces = iter != edges.end();
 		if (has_two_adjacent_faces) {
-			iter->second->is_inner = true;
-			iter->second->fb = f;
+			if (!iter->second->is_inner) {
+				iter->second->is_inner = true;
+				iter->second->fb = f;
+			}
 		} else {
 			Edge *es = new Edge(e->va, *v, f, NULL);
 			edge_front.push_back(es);
@@ -145,8 +149,10 @@ void Mesher::expandTriangulation() {
 		iter = edges.find(edge_index);
 		has_two_adjacent_faces = iter != edges.end();
 		if (has_two_adjacent_faces) {
-			iter->second->is_inner = true;
-			iter->second->fb = f;
+			if (!iter->second->is_inner) {
+				iter->second->is_inner = true;
+				iter->second->fb = f;
+			}
 		} else {
 			Edge *et = new Edge(e->vb, *v, f, NULL);
 			edge_front.push_back(et);
@@ -164,6 +170,9 @@ Vertex * Mesher::findCandidate(Edge * e) {
 	std::cout << "[Mesher] e->fa = " << fa << std::endl;
 	#endif
 	Vector c = fa->get_circumcenter();
+	double r2 = fa->get_circumradius2();
+	c = c + sqrt(radius * radius - r2) * fa->get_normal();
+
 	Vector m = e->midpoint();
 	double r_prime = (m - c).norm() + radius;
 	double t_min = 2 * M_PI;
@@ -184,7 +193,7 @@ Vertex * Mesher::findCandidate(Edge * e) {
 		}
 		// Don't use v if it is not compatible with e (not same orientation)
 		// page 157, first paragraph (e.target - e.source) x (v - e.source)
-		Vector x = cross(e->vb.position - e->va.position, v->position - e->va.position);
+		Vector x = cross(e->vb.position - e->va.position, v->position - e->va.position).unit();
 		double d1 = dot(x, v->normal);
 		double d2 = dot(x, e->va.normal);
 		double d3 = dot(x, e->vb.normal);
@@ -204,12 +213,12 @@ Vertex * Mesher::findCandidate(Edge * e) {
 		double oldR2 = fa->get_circumradius2();
 
 		// If c_new does not exist, continue
-		if (newR2 > oldR2) {
-			#ifdef TEST_DEBUG
-			std::cout << "[Mesher] c_new does not exist!" << std::endl;
-			#endif
-			continue;
-		}
+		// if (newR2 > oldR2) {
+		// 	#ifdef TEST_DEBUG
+		// 	std::cout << "[Mesher] c_new does not exist!" << std::endl;
+		// 	#endif
+		// 	continue;
+		// }
 
 		// Compute the angle theta between both circumcenters and the midpoint
 		Vector vecA = c - m;

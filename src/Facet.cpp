@@ -16,8 +16,9 @@ Facet::Facet(const Vertex &va, const Vertex &vb, const Vertex &vc, Edge *ea, Edg
 
 Facet::Facet(Edge *e, const Vertex &v) : va(e->va), vb(e->vb), vc(v) {
 	ea = e;
-	eb = new Edge(va, vc, e->fa, NULL);
-	ec = new Edge(vb, vc, e->fa, NULL);
+	ea->fb = this;
+	eb = new Edge(vb, vc, this, NULL);
+	ec = new Edge(vc, va, this, NULL);
 
 	initialize();
 }
