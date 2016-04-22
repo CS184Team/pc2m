@@ -7,11 +7,11 @@
 
 class Edge {
 public:
-	const Vertex &va;
-	const Vertex &vb;
+	Vertex &va;
+	Vertex &vb;
 	Facet *fa;
 	Facet *fb;
-	Edge(const Vertex &a, const Vertex &b, Facet *o, Facet *n);
+	Edge(Vertex &a, Vertex &b, Facet *o, Facet *n);
 	Vector midpoint() const;
 	bool is_inner;
 	bool is_boundary;

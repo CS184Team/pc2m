@@ -4,14 +4,14 @@
 #include <stdio.h>
 #include <math.h>
 
-Facet::Facet(const Vertex &va, const Vertex &vb, const Vertex &vc) : 
+Facet::Facet(Vertex &va, Vertex &vb, Vertex &vc) : 
 	va(va),
 	vb(vb),
 	vc(vc) {
 	initialize();
 }
 
-Facet::Facet(Edge *e, const Vertex &v) : va(e->va), vb(e->vb), vc(v) {
+Facet::Facet(Edge *e, Vertex &v) : va(e->va), vb(e->vb), vc(v) {
 	initialize();
 }
 

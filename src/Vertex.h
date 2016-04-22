@@ -14,7 +14,10 @@ public:
 	double nz() const;
 	const Vector &position;
 	const Vector &normal;
-	bool is_inner;
+	bool in_facet;
+	int front_count;
+	bool is_boundary;
+	bool is_inner_vertex() const;
 	int index;
 	Vertex(const int index, const Vector &position, const Vector &normal);
 	friend std::ostream& operator<<(std::ostream &os, const Vertex &vertex);

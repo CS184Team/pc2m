@@ -1,6 +1,6 @@
 #include "Edge.h"
 
-Edge::Edge(const Vertex &va, const Vertex &vb, Facet *fa, Facet *fb) : va(va), vb(vb) {
+Edge::Edge(Vertex &va, Vertex &vb, Facet *fa, Facet *fb) : va(va), vb(vb) {
 	this->fa = fa;
 	this->fb = fb;
 	is_inner = false;

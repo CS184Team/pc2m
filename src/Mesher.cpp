@@ -70,6 +70,12 @@ bool Mesher::findSeedTriangle() {
 				}
 				// empty_ball_config = true;
 				if (empty_ball_config) {
+					p->in_facet = true;
+					q->in_facet = true;
+					s->in_facet = true;
+					p->front_count += 2;
+					q->front_count += 2;
+					s->front_count += 2;
 					Edge *ea = new Edge(*p, *q, f, NULL);
 					Edge *eb = new Edge(*q, *s, f, NULL);
 					Edge *ec = new Edge(*s, *p, f, NULL);
@@ -80,6 +86,7 @@ bool Mesher::findSeedTriangle() {
 					edge_front.push_back(eb);
 					edge_front.push_back(ec);
 					facets.push_back(f);
+
 					++seed_triangle_index;
 					// return f;
 					return true;
@@ -99,6 +106,10 @@ void Mesher::expandTriangulation() {
 	while (!edge_front.empty()) {
 		Edge *e = edge_front.back();
 		edge_front.pop_back();
+		assert (e->va.front_count > 0);
+		assert (e->vb.front_count > 0);
+		e->va.front_count--;
+		e->vb.front_count--;
 		#ifdef TEST_DEBUG
 		std::cout << "[Mesher] Expanding on edge " << e << std::endl;
 		#endif
@@ -108,11 +119,16 @@ void Mesher::expandTriangulation() {
 		Vertex *v = findCandidate(e);
 		if (v == NULL) {
 			e->is_boundary = true;
+			e->va.is_boundary = true;
+			e->vb.is_boundary = true;
 			continue;
 		}
 		// We can always add this facet.
 		// We know it's a new facet because, otherwise, e->is_inner would be true.
 		Facet *f = new Facet(e, *v);
+		f->va.in_facet = true;
+		f->vb.in_facet = true;
+		f->vc.in_facet = true;
 		facets.push_back(f);
 
 		int v1, v2;
@@ -133,6 +149,8 @@ void Mesher::expandTriangulation() {
 			}
 		} else {
 			Edge *es = new Edge(e->va, *v, f, NULL);
+			es->va.front_count++;
+			es->vb.front_count++;
 			edge_front.push_back(es);
 			edges.insert({edge_index, es});
 		}
@@ -152,6 +170,8 @@ void Mesher::expandTriangulation() {
 			}
 		} else {
 			Edge *et = new Edge(e->vb, *v, f, NULL);
+			et->va.front_count++;
+			et->vb.front_count++;
 			edge_front.push_back(et);
 			edges.insert({edge_index, et});
 		}
@@ -182,7 +202,7 @@ Vertex * Mesher::findCandidate(Edge * e) {
 
 	for (Vertex *v : nrp) {
 		// Don't use v if it is an inner vertex or it belongs to e
-		if (v->is_inner || &(e->va) == v || &(e->vb) == v) {
+		if (v->is_inner_vertex() || &(e->va) == v || &(e->vb) == v) {
 			#ifdef TEST_DEBUG
 			std::cout << "[Mesher] " << v << " is either inner or it belongs to e!" << std::endl;
 			#endif

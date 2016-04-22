@@ -11,11 +11,11 @@ public:
 	double get_circumradius() const;
 	double get_circumradius2() const;
 	const Vector & get_normal() const;
-	const Vertex &va;
-	const Vertex &vb;
-	const Vertex &vc;
-	Facet(Edge *e, const Vertex &v);
-	Facet(const Vertex &va, const Vertex &vb, const Vertex &vc);
+	Vertex &va;
+	Vertex &vb;
+	Vertex &vc;
+	Facet(Edge *e, Vertex &v);
+	Facet(Vertex &va, Vertex &vb, Vertex &vc);
 	friend std::ostream & operator<<(std::ostream &os, const Facet &f);
 	friend std::ostream & operator<<(std::ostream &os, const Facet *f);
 private:
