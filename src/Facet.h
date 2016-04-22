@@ -15,6 +15,7 @@ public:
 	const Vertex &vb;
 	const Vertex &vc;
 	Facet(Edge *e, const Vertex &v);
+	Facet(const Vertex &va, const Vertex &vb, const Vertex &vc);
 	friend std::ostream & operator<<(std::ostream &os, const Facet &f);
 	friend std::ostream & operator<<(std::ostream &os, const Facet *f);
 private:

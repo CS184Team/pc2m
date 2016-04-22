@@ -58,7 +58,7 @@ double Facet::get_circumradius2() const {
 }
 
 std::ostream & operator<<(std::ostream &os, const Facet &f) {
-	os << "(" << f.va << ", " << f.vb << ", " << f.vc << ") (" << f.ea << ", " << f.eb << ", " << f.ec << ")";
+	os << f.va << ", " << f.vb << ", " << f.vc;
 	return os;
 }
 
