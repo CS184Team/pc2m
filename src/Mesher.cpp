@@ -41,8 +41,6 @@ bool Mesher::findSeedTriangle() {
 	for (; seed_triangle_index < cloud.size(); ++seed_triangle_index) {
 		auto p = cloud[seed_triangle_index];
 		Cloud neighbors = voxelArray->get_neighboring_vertices(p->position);
-		#ifdef TEST_DEBUG
-		#endif
 		for (auto q : neighbors) {
 			if (p == q) {
 				continue;
@@ -131,6 +129,7 @@ void Mesher::expandTriangulation() {
 		bool has_two_adjacent_faces = iter != edges.end();
 		if (has_two_adjacent_faces) {
 			iter->second->is_inner = true;
+			iter->second->fb = f;
 		} else {
 			Edge *es = new Edge(e->va, *v, f, NULL);
 			edge_front.push_back(es);
@@ -147,6 +146,7 @@ void Mesher::expandTriangulation() {
 		has_two_adjacent_faces = iter != edges.end();
 		if (has_two_adjacent_faces) {
 			iter->second->is_inner = true;
+			iter->second->fb = f;
 		} else {
 			Edge *et = new Edge(e->vb, *v, f, NULL);
 			edge_front.push_back(et);
@@ -254,25 +254,3 @@ Vertex * Mesher::findCandidate(Edge * e) {
 	#endif
 	return candidate;
 }
-
-// int main(int argc, char **argv) {
-// 	int a = 3;
-// 	int *a_ptr = &a;
-// 	int &a_ref = a;
-// 	int &a_ref_ref = a_ref;
-
-// 	int eq = &a_ref_ref == a_ptr;
-// 	printf("%d\n", eq);
-// }
-
-// int main(int argc, char **argv) {
-// 	char *file = argv[1];
-// 	for (double theta = 0.0; theta < M_PI * 2.0; theta += 0.1) {
-// 		for (double phi = 0.0; phi < M_PI * 2.0; phi += 0.1) {
-// 			double x = sin(theta) * cos(phi);
-// 			double y = sin(theta) * sin(phi);
-// 			double z = cos(theta);
-
-// 		}
-// 	}
-// }
