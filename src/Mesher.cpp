@@ -57,7 +57,7 @@ bool Mesher::findSeedTriangle() {
 				if (d1 < 0.0 || d2 < 0.0 || d3 < 0.0) {
 					continue;
 				}
-				Facet *f = new Facet(*p, *q, *s, NULL, NULL, NULL);
+				Facet *f = new Facet(*p, *q, *s);
 				Vector c = f->get_circumcenter();
 				double r2 = f->get_circumradius2();
 				c = c + sqrt(radius * radius - r2) * n;
@@ -73,9 +73,6 @@ bool Mesher::findSeedTriangle() {
 					Edge *ea = new Edge(*p, *q, f, NULL);
 					Edge *eb = new Edge(*q, *s, f, NULL);
 					Edge *ec = new Edge(*s, *p, f, NULL);
-					f->ea = ea;
-					f->eb = eb;
-					f->ec = ec;
 					edges.insert({ea->get_index(), ea});
 					edges.insert({eb->get_index(), eb});
 					edges.insert({ec->get_index(), ec});

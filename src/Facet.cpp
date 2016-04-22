@@ -4,22 +4,14 @@
 #include <stdio.h>
 #include <math.h>
 
-Facet::Facet(const Vertex &va, const Vertex &vb, const Vertex &vc, Edge *ea, Edge *eb, Edge *ec) : 
+Facet::Facet(const Vertex &va, const Vertex &vb, const Vertex &vc) : 
 	va(va),
 	vb(vb),
-	vc(vc),
-	ea(ea),
-	eb(eb),
-	ec(ec) {
+	vc(vc) {
 	initialize();
 }
 
 Facet::Facet(Edge *e, const Vertex &v) : va(e->va), vb(e->vb), vc(v) {
-	ea = e;
-	ea->fb = this;
-	eb = new Edge(vb, vc, this, NULL);
-	ec = new Edge(vc, va, this, NULL);
-
 	initialize();
 }
 
@@ -77,17 +69,3 @@ std::ostream & operator<<(std::ostream &os, const Facet *f) {
 	}
 	return os << *f;
 }
-
-// int main(int argc, char **argv) {
-// 	Vector a = Vector(5.0/2, 2.5, 0);
-// 	Vector b = Vector(4, 4.0/5, 0);
-// 	Vector c = Vector(0.5, 1.0/4, 0);
-// 	Vector n = Vector();
-// 	Vertex va = Vertex(a, n);
-// 	Vertex vb = Vertex(b, n);
-// 	Vertex vc = Vertex(c, n);
-// 	Edge e(va, vb, NULL, NULL);
-// 	Facet facet(va, vb, vc, e, e, e);
-// 	Vector center = facet.circumcenter();
-// 	printf("%f %f %f\n", center.x, center.y, center.z);
-// }

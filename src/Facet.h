@@ -14,10 +14,6 @@ public:
 	const Vertex &va;
 	const Vertex &vb;
 	const Vertex &vc;
-	Edge *ea;
-	Edge *eb;
-	Edge *ec;
-	Facet(const Vertex &va, const Vertex &vb, const Vertex &vc, Edge *ea, Edge *eb, Edge *ec);
 	Facet(Edge *e, const Vertex &v);
 	friend std::ostream & operator<<(std::ostream &os, const Facet &f);
 	friend std::ostream & operator<<(std::ostream &os, const Facet *f);
